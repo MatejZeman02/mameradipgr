@@ -1,3 +1,25 @@
+# Theatre project .gitignore:
+
+# specific folders
+.vscode/
+.vs/
+Debug/
+doxygen/
+skeleton/
+x64/
+x86/
+Old/
+
+*.sln*
+*.vcxproj*
+
+.TODO.md
+.clang-format
+
+# python code (if any)
+*.pyc
+*.cython
+
 # Prerequisites
 *.d
 
