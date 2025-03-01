@@ -15,6 +15,7 @@ odkaz na playlist: [https://www.youtube.com/watch?v=AfeIe7gPTfA&list=PL8uMtryYBl
 
 videa:
 0. [uvod](https://www.youtube.com/watch?v=AfeIe7gPTfA&list=PL8uMtryYBlUs3nrvy2y9QShdWlLqf3jIK&pp=gAQB)
+1. [kostra](https://youtu.be/EtryIrACrJU?si=1I7fpNJBY-5X_SfU)
 
 ## Fáze
 
