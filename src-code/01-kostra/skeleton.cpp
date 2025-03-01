@@ -11,48 +11,61 @@ import object_instance;
 import triangle;
 import singlemesh;
 
-// globals:
+
 ObjectList objects;
 
-ShaderProgram commonshaderProgram;
-CDefaultCamera defaultCamera; // XD 8
+// shared shader programs
+ShaderProgram commonShaderProgram;
 
 // -----------------------  OpenGL stuff ---------------------------------
 
 /**
  * \brief Load and compile shader programs. Get attribute locations.
  */
-void loadshaderProgram_ps()
+void loadShaderPrograms()
 {
     CHECK_GL_ERROR(); // clear the error flag
+    // original method:
+    // std::string vertexShaderSrc = "#version 330 core\n"
+    //                               "in vec2 position;\n"
+    //                               "uniform mat4 PVM;\n"
+    //                               "void main() {\n"
+    //                               "  gl_Position = PVM * vec4(position, 0.0f, 1.0f);\n"
+    //                               "}\n";
+    // std::string fragmentShaderSrc = "#version 330 core\n"
+    //                                 "out vec4 fragmentColor;"
+    //                                 "void main() {\n"
+    //                                 "  fragmentColor = vec4(1.0f, 1.0f, 1.0f, 1.0f);\n"
+    //                                 "}\n";
+    // GLuint shaders[] = { pgr::createShaderFromSource( GL_VERTEX_SHADER, vertexShaderSrc ),
+    //                      pgr::createShaderFromSource( GL_FRAGMENT_SHADER, fragmentShaderSrc ), 0 };
+
     // using vector for shaders ids:
     std::vector<GLuint> shaders;
 
-    shaders.push_back( pgr::createShaderFromFile( GL_VERTEX_SHADER, "shaders/pseudo.vert" ) );   // XD 5
-    shaders.push_back( pgr::createShaderFromFile( GL_FRAGMENT_SHADER, "shaders/pseudo.frag" ) ); // XD 5
-    // shaders.push_back( pgr::createShaderFromFile( GL_VERTEX_SHADER, "shaders/basic.vert" ) );
-    // shaders.push_back( pgr::createShaderFromFile( GL_FRAGMENT_SHADER, "shaders/basic.frag" ) );
+    shaders.push_back( pgr::createShaderFromFile( GL_VERTEX_SHADER, "shaders/basic.vert" ) );
+    shaders.push_back( pgr::createShaderFromFile( GL_FRAGMENT_SHADER, "shaders/basic.frag" ) );
 
-    commonshaderProgram.program = pgr::createProgram( shaders );
-    commonshaderProgram.locations.position = glGetAttribLocation( commonshaderProgram.program, "position" );
+    commonShaderProgram.program = pgr::createProgram( shaders );
+    commonShaderProgram.locations.position = glGetAttribLocation( commonShaderProgram.program, "position" );
 
     // other attributes and uniforms
-    commonshaderProgram.locations.PVMmatrix = glGetUniformLocation( commonshaderProgram.program, "PVM" );
+    commonShaderProgram.locations.PVMmatrix = glGetUniformLocation( commonShaderProgram.program, "PVM" );
 
     // checking if the inputs initialized (not -1):
-    assert( commonshaderProgram.locations.PVMmatrix != -1 );
-    assert( commonshaderProgram.locations.position != -1 );
+    assert( commonShaderProgram.locations.PVMmatrix != -1 );
+    assert( commonShaderProgram.locations.position != -1 );
     // ...
 
-    commonshaderProgram.initialized = true;
+    commonShaderProgram.initialized = true;
 }
 
 /**
  * \brief Delete all shader program objects.
  */
-void cleanupshaderProgram_ps( void )
+void cleanupShaderPrograms( void )
 {
-    pgr::deleteProgramAndShaders( commonshaderProgram.program );
+    pgr::deleteProgramAndShaders( commonShaderProgram.program );
 }
 
 /**
@@ -60,25 +73,20 @@ void cleanupshaderProgram_ps( void )
  */
 void drawScene( void )
 {
-    /* // XD 12 */
-    // count matrices based on camera
-    // glm::mat4 viewMatrix = glm::mat4( 1.0f ); // no transformation
+    // count matrices based on your camera (right now no cam)
+    glm::mat4 viewMatrix = glm::mat4( 1.0f );
     // glm::mat4 projectionMatrix = glm::mat4( 1.0f ); // default ortho matrix
 
-    glm::mat4 viewMatrix = defaultCamera.getView();
-
+    // TODO: compute perspective projection matrix by the window size for now:
     int win_width = glutGet( GLUT_WINDOW_WIDTH );
     int win_height = glutGet( GLUT_WINDOW_HEIGHT );
-
-    float fov = glm::radians( 45.0f );
-    float aspectRatio = (float)win_width / win_height;
-    float nearClippingPlane = 0.1f;
-    float farClippingPlane = 100.0f;
-    glm::mat4 projectionMatrix = glm::perspective( fov, aspectRatio, nearClippingPlane, farClippingPlane );
-    /* // XD 12 */
+    glm::mat4 projectionMatrix =
+        glm::perspective( glm::radians( 45.0f ), static_cast<float>( win_width ) / win_height, 0.1f, 100.0f );
 
     for ( ObjectInstance *object : objects )
+    { // for (auto object : objects) {
         if ( object != nullptr ) object->draw( viewMatrix, projectionMatrix );
+    }
 }
 
 // -----------------------  Window callbacks ---------------------------------
@@ -201,6 +209,12 @@ void mouseMotionCb( int mouseX, int mouseY )
  */
 void passiveMouseMotionCb( int mouseX, int mouseY )
 {
+
+    // mouse hovering over window
+
+    // create display event to redraw window contents if needed (and not handled in the timer callback)
+    // glutPostRedisplay();
+
     static bool warpPointer = false;
     if ( warpPointer ) // Prevent recursion from glutWarpPointer
     {
@@ -213,15 +227,7 @@ void passiveMouseMotionCb( int mouseX, int mouseY )
     float deltaX = static_cast<float>( mouseX - middleX );
     float deltaY = static_cast<float>( mouseY - middleY );
 
-    /* // XD 11 */
-    // |angleVertical| <= 90 degrees for natural looking camera movement
-    defaultCamera.angleVertical_m = std::clamp( defaultCamera.angleVertical_m - deltaY, -90.0f, 90.0f );
-
-    // Modulo 360 for horizontal rotation
-    defaultCamera.angleHorizontal_m -= deltaX;
-    defaultCamera.angleHorizontal_m = fmod( defaultCamera.angleHorizontal_m, 360.0f );
-    if ( defaultCamera.angleHorizontal_m < 0.0f ) defaultCamera.angleHorizontal_m += 360.0f;
-    /* // XD 11 */
+    // TODO: count Y angle <= 90 degrees for natural looking camera movement
 
     // Set mouse pointer to the window center
     warpPointer = true;
@@ -262,10 +268,10 @@ void initApplication()
 {
     // init OpenGL
     // - all programs (shaders), buffers, textures, ...
-    loadshaderProgram_ps();
+    loadShaderPrograms();
 
-    objects.push_back( new Triangle( &commonshaderProgram ) );
-    // objects.push_back( new SingleMesh( &commonshaderProgram ) ); // XD 7
+    objects.push_back( new Triangle( &commonShaderProgram ) );
+    // objects.push_back(new SingleMesh(&commonShaderProgram));
 
     // init your Application
     // - setup the initial application state
@@ -282,7 +288,7 @@ void finalizeApplication( void )
     // cleanupModels();
 
     // delete shaders
-    cleanupshaderProgram_ps();
+    cleanupShaderPrograms();
 }
 
 // ----------------------------------------------  Main ----------------------------------------------
@@ -319,7 +325,7 @@ int main( int argc, char **argv )
         // glutSpecialUpFunc(specialKeyboardUpCb); // key released
         // glutMouseFunc(mouseCb);
         // glutMotionFunc(mouseMotionCb);
-        glutPassiveMotionFunc( passiveMouseMotionCb ); // passive is stronger than normal mouseMotionCb() // XD 10
+        // glutPassiveMotionFunc( passiveMouseMotionCb ); // passive is stronger than normal mouseMotionCb()
         glutTimerFunc( MILISECONDS, timerCb, 0 );
     }
     // end for each window

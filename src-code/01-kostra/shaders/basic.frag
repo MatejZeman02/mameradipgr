@@ -1,4 +1,4 @@
-#version 450 core
+#version 140
 /*
 * basic fragment shader, which just outputs a single color
 */

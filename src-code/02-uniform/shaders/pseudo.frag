@@ -1,4 +1,4 @@
-#version 450 core
+#version 330 core
 /*
 * define the output variable color based on gl_VertexID 
 */

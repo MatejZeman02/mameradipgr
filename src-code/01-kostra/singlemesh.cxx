@@ -10,26 +10,25 @@ void SingleMesh::update( float elapsedTime, const glm::mat4 *parentModelMatrix )
 {
     // instance specific stuff
 
-    // propagate the update to children_p
+    // propagate the update to children
     ObjectInstance::update( elapsedTime, parentModelMatrix );
 }
 
 void SingleMesh::draw( const glm::mat4 &viewMatrix, const glm::mat4 &projectionMatrix )
 {
-    if ( initialized_ && ( shaderProgram_p != nullptr ) )
+    if ( initialized && ( shaderProgram != nullptr ) )
     {
-        glUseProgram( shaderProgram_p->program );
+        glUseProgram( shaderProgram->program );
 
-        glUniformMatrix4fv( shaderProgram_p->locations.PVMmatrix, 1, GL_FALSE,
-                            glm::value_ptr( globalModelMatrix_p ) );
+        glUniformMatrix4fv( shaderProgram->locations.PVMmatrix, 1, GL_FALSE, glm::value_ptr( globalModelMatrix ) );
 
-        glBindVertexArray( geometry_p->vertexArrayObject );
-        glDrawElements( GL_TRIANGLES, geometry_p->numTriangles * 3, GL_UNSIGNED_INT, 0 );
+        glBindVertexArray( geometry->vertexArrayObject );
+        glDrawElements( GL_TRIANGLES, geometry->numTriangles * 3, GL_UNSIGNED_INT, 0 );
         glBindVertexArray( 0 );
     }
     else
     {
-        std::cerr << "SingleMesh::draw(): Can't draw, mesh not initialized_ properly!" << std::endl;
+        std::cerr << "SingleMesh::draw(): Can't draw, mesh not initialized properly!" << std::endl;
     }
 }
 
@@ -37,9 +36,9 @@ void SingleMesh::draw( const glm::mat4 &viewMatrix, const glm::mat4 &projectionM
  * Asteroids)
  * \param fileName [in] file to open/load
  * \param shader [in] vao will connect loaded data to shader
- * \param geometry_p
+ * \param geometry
  */
-bool SingleMesh::loadSingleMesh( const std::string &fileName, ShaderProgram *shader, ObjectGeometry **geometry_p )
+bool SingleMesh::loadSingleMesh( const std::string &fileName, ShaderProgram *shader, ObjectGeometry **geometry )
 {
     Assimp::Importer importer;
 
@@ -50,7 +49,7 @@ bool SingleMesh::loadSingleMesh( const std::string &fileName, ShaderProgram *sha
     const aiScene *scn = importer.ReadFile(
         fileName.c_str(), 0 | aiProcess_Triangulate            // triangulate polygons (if any)
                               | aiProcess_PreTransformVertices // transforms scene hierarchy into one root with
-                                                               // geometry_p-leafs only, for more see Doc
+                                                               // geometry-leafs only, for more see Doc
                               | aiProcess_GenSmoothNormals     // calculate normals per vertex
                               | aiProcess_JoinIdenticalVertices );
 
@@ -58,7 +57,7 @@ bool SingleMesh::loadSingleMesh( const std::string &fileName, ShaderProgram *sha
     if ( scn == NULL )
     {
         std::cerr << "SingleMesh::loadSingleMesh(): assimp error - " << importer.GetErrorString() << std::endl;
-        *geometry_p = NULL;
+        *geometry = NULL;
         return false;
     }
 
@@ -69,18 +68,18 @@ bool SingleMesh::loadSingleMesh( const std::string &fileName, ShaderProgram *sha
         std::cerr
             << "SingleMesh::loadSingleMesh(): this simplified loader can only process files with only one mesh"
             << std::endl;
-        *geometry_p = NULL;
+        *geometry = NULL;
         return false;
     }
 
     // in this phase we know we have one mesh in our loaded scene, we can directly copy its data to OpenGL ...
     const aiMesh *mesh = scn->mMeshes[0];
 
-    *geometry_p = new ObjectGeometry;
+    *geometry = new ObjectGeometry;
 
     // vertex buffer object, store all vertex positions
-    glGenBuffers( 1, &( ( *geometry_p )->vertexBufferObject ) );
-    glBindBuffer( GL_ARRAY_BUFFER, ( *geometry_p )->vertexBufferObject );
+    glGenBuffers( 1, &( ( *geometry )->vertexBufferObject ) );
+    glBindBuffer( GL_ARRAY_BUFFER, ( *geometry )->vertexBufferObject );
     glBufferData( GL_ARRAY_BUFFER, 3 * sizeof( float ) * mesh->mNumVertices, 0,
                   GL_STATIC_DRAW ); // allocate memory for vertices
     glBufferSubData( GL_ARRAY_BUFFER, 0, 3 * sizeof( float ) * mesh->mNumVertices,
@@ -97,8 +96,8 @@ bool SingleMesh::loadSingleMesh( const std::string &fileName, ShaderProgram *sha
     }
 
     // copy our temporary index array to OpenGL and free the array
-    glGenBuffers( 1, &( ( *geometry_p )->elementBufferObject ) );
-    glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, ( *geometry_p )->elementBufferObject );
+    glGenBuffers( 1, &( ( *geometry )->elementBufferObject ) );
+    glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, ( *geometry )->elementBufferObject );
     glBufferData( GL_ELEMENT_ARRAY_BUFFER, 3 * sizeof( unsigned int ) * mesh->mNumFaces, indices, GL_STATIC_DRAW );
 
     delete[] indices;
@@ -115,17 +114,17 @@ bool SingleMesh::loadSingleMesh( const std::string &fileName, ShaderProgram *sha
     if ( ( retValue = aiGetMaterialColor( mat, AI_MATKEY_COLOR_DIFFUSE, &color ) ) != AI_SUCCESS )
         color = aiColor4D( 0.0f, 0.0f, 0.0f, 0.0f );
 
-    glGenVertexArrays( 1, &( ( *geometry_p )->vertexArrayObject ) );
-    glBindVertexArray( ( *geometry_p )->vertexArrayObject );
+    glGenVertexArrays( 1, &( ( *geometry )->vertexArrayObject ) );
+    glBindVertexArray( ( *geometry )->vertexArrayObject );
 
     glBindBuffer( GL_ELEMENT_ARRAY_BUFFER,
-                  ( *geometry_p )->elementBufferObject ); // bind our element array buffer (indices) to vao
-    glBindBuffer( GL_ARRAY_BUFFER, ( *geometry_p )->vertexBufferObject );
+                  ( *geometry )->elementBufferObject ); // bind our element array buffer (indices) to vao
+    glBindBuffer( GL_ARRAY_BUFFER, ( *geometry )->vertexBufferObject );
 
     bool validInit = false;
 
-    if ( ( shaderProgram_p != nullptr ) && shaderProgram_p->initialized &&
-         ( shaderProgram_p->locations.position != -1 ) )
+    if ( ( shaderProgram != nullptr ) && shaderProgram->initialized &&
+         ( shaderProgram->locations.position != -1 ) )
     {
 
         glEnableVertexAttribArray( shader->locations.position );
@@ -138,36 +137,36 @@ bool SingleMesh::loadSingleMesh( const std::string &fileName, ShaderProgram *sha
 
     glBindVertexArray( 0 );
 
-    ( *geometry_p )->numTriangles = mesh->mNumFaces;
+    ( *geometry )->numTriangles = mesh->mNumFaces;
 
     return validInit;
 }
 
-SingleMesh::SingleMesh( ShaderProgram *shdrPrg ) : ObjectInstance( shdrPrg ), initialized_( false )
+SingleMesh::SingleMesh( ShaderProgram *shdrPrg ) : ObjectInstance( shdrPrg ), initialized( false )
 {
     const char *MODEL_FILE_NAME = "data/shape.obj";
 
-    if ( !loadSingleMesh( MODEL_FILE_NAME, shdrPrg, &geometry_p ) )
+    if ( !loadSingleMesh( MODEL_FILE_NAME, shdrPrg, &geometry ) )
     {
-        if ( geometry_p == nullptr )
+        if ( geometry == nullptr )
         {
-            std::cerr << "SingleMesh::SingleMesh(): geometry_p not initialized_!" << std::endl;
+            std::cerr << "SingleMesh::SingleMesh(): geometry not initialized!" << std::endl;
         }
         else
         {
-            std::cerr << "SingleMesh::SingleMesh(): shaderProgram_p struct not initialized_!" << std::endl;
+            std::cerr << "SingleMesh::SingleMesh(): shaderProgram struct not initialized!" << std::endl;
         }
     }
     else
     {
-        if ( ( shaderProgram_p != nullptr ) && shaderProgram_p->initialized &&
-             ( shaderProgram_p->locations.PVMmatrix != -1 ) )
+        if ( ( shaderProgram != nullptr ) && shaderProgram->initialized &&
+             ( shaderProgram->locations.PVMmatrix != -1 ) )
         {
-            initialized_ = true;
+            initialized = true;
         }
         else
         {
-            std::cerr << "SingleMesh::SingleMesh(): shaderProgram_p struct not initialized_!" << std::endl;
+            std::cerr << "SingleMesh::SingleMesh(): shaderProgram struct not initialized!" << std::endl;
         }
     }
 }
@@ -175,15 +174,15 @@ SingleMesh::SingleMesh( ShaderProgram *shdrPrg ) : ObjectInstance( shdrPrg ), in
 SingleMesh::~SingleMesh()
 {
 
-    if ( geometry_p != nullptr )
+    if ( geometry != nullptr )
     {
-        glDeleteVertexArrays( 1, &( geometry_p->vertexArrayObject ) );
-        glDeleteBuffers( 1, &( geometry_p->elementBufferObject ) );
-        glDeleteBuffers( 1, &( geometry_p->vertexBufferObject ) );
+        glDeleteVertexArrays( 1, &( geometry->vertexArrayObject ) );
+        glDeleteBuffers( 1, &( geometry->elementBufferObject ) );
+        glDeleteBuffers( 1, &( geometry->vertexBufferObject ) );
 
-        delete geometry_p;
-        geometry_p = nullptr;
+        delete geometry;
+        geometry = nullptr;
     }
 
-    initialized_ = false;
+    initialized = false;
 }

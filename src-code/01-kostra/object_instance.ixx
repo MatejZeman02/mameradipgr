@@ -8,14 +8,14 @@ import object_list; // ObjectList
 export class ObjectInstance
 {
   protected:
-    struct ObjectGeometry *geometry_p;
-    glm::mat4 localModelMatrix_p;
-    glm::mat4 globalModelMatrix_p;
-    struct ShaderProgram *shaderProgram_p;
-    ObjectList children_p;
+    struct ObjectGeometry *geometry;
+    glm::mat4 localModelMatrix;
+    glm::mat4 globalModelMatrix;
+    struct ShaderProgram *shaderProgram;
+    ObjectList children;
 
   public:
-    ObjectInstance( ShaderProgram *shaderProgram_p = nullptr );
+    ObjectInstance( ShaderProgram *shaderProgram = nullptr );
     virtual ~ObjectInstance() = default;
     virtual void update( const float elapsedTime, const glm::mat4 *parentModelMatrix );
     virtual void draw( const glm::mat4 &viewMatrix, const glm::mat4 &projectionMatrix );

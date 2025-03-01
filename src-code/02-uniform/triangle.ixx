@@ -1,21 +1,20 @@
 #include "pgr.h"
-export module singlemesh;
+export module triangle;
 
-import std;
-import resources;
+// import std;
+
 import object_instance;
+import resources;
 
-export class SingleMesh : public ObjectInstance
+export class Triangle : public ObjectInstance
 {
   public:
-    SingleMesh( ShaderProgram *shdrPrg = nullptr );
-    ~SingleMesh();
+    Triangle( shaderProgram_p *shdrPrg = nullptr );
+    ~Triangle();
 
     void update( float elapsedTime, const glm::mat4 *parentModelMatrix ) override;
     void draw( const glm::mat4 &viewMatrix, const glm::mat4 &projectionMatrix ) override;
 
   private:
-    bool loadSingleMesh( const std::string &fileName, ShaderProgram *shader, ObjectGeometry **geometry_p );
-
     bool initialized_; ///< object has the shader with defined locations
 };

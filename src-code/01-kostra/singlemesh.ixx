@@ -15,7 +15,7 @@ export class SingleMesh : public ObjectInstance
     void draw( const glm::mat4 &viewMatrix, const glm::mat4 &projectionMatrix ) override;
 
   private:
-    bool loadSingleMesh( const std::string &fileName, ShaderProgram *shader, ObjectGeometry **geometry_p );
+    bool loadSingleMesh( const std::string &fileName, ShaderProgram *shader, ObjectGeometry **geometry );
 
-    bool initialized_; ///< object has the shader with defined locations
+    bool initialized; ///< object has the shader with defined locations
 };

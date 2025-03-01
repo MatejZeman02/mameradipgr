@@ -4,7 +4,7 @@ module object_instance;
 import std;
 import object_list; // ObjectList
 
-ObjectInstance::ObjectInstance( ShaderProgram *shaderProgram_p )
+ObjectInstance::ObjectInstance( shaderProgram_p *shaderProgram_p )
     : geometry_p( nullptr ), shaderProgram_p( shaderProgram_p )
 {
 }

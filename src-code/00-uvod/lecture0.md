@@ -1,8 +1,8 @@
-# Lekce 1
+# Lekce 0
 
 ## Hello World
 
-V tomto segmentu si ukážeme `hello world` pro OpenGl a postupně si vysvětlíme všechny kroky.
+V tomto segmentu si ukážeme `hello world` pro OpenGl.
 
 ## Kód
 
@@ -106,9 +106,3 @@ int main(int argc, char** argv) {
 
 Výsledkem takového kódu je zobrazený trojúhelník v okně.
 
-Pojďme si kód podrobně rozebrat:
-
-1. Glut
-Glut je pomocná knihovna k OpenGl a slouží k zobrazování...
-
-... `TODO`: continue

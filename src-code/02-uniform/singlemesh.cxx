@@ -39,7 +39,8 @@ void SingleMesh::draw( const glm::mat4 &viewMatrix, const glm::mat4 &projectionM
  * \param shader [in] vao will connect loaded data to shader
  * \param geometry_p
  */
-bool SingleMesh::loadSingleMesh( const std::string &fileName, ShaderProgram *shader, ObjectGeometry **geometry_p )
+bool SingleMesh::loadSingleMesh( const std::string &fileName, shaderProgram_p *shader,
+                                 ObjectGeometry **geometry_p )
 {
     Assimp::Importer importer;
 
@@ -124,7 +125,7 @@ bool SingleMesh::loadSingleMesh( const std::string &fileName, ShaderProgram *sha
 
     bool validInit = false;
 
-    if ( ( shaderProgram_p != nullptr ) && shaderProgram_p->initialized &&
+    if ( ( shaderProgram_p != nullptr ) && shaderProgram_p->initialized_ &&
          ( shaderProgram_p->locations.position != -1 ) )
     {
 
@@ -143,7 +144,7 @@ bool SingleMesh::loadSingleMesh( const std::string &fileName, ShaderProgram *sha
     return validInit;
 }
 
-SingleMesh::SingleMesh( ShaderProgram *shdrPrg ) : ObjectInstance( shdrPrg ), initialized_( false )
+SingleMesh::SingleMesh( shaderProgram_p *shdrPrg ) : ObjectInstance( shdrPrg ), initialized_( false )
 {
     const char *MODEL_FILE_NAME = "data/shape.obj";
 
@@ -160,7 +161,7 @@ SingleMesh::SingleMesh( ShaderProgram *shdrPrg ) : ObjectInstance( shdrPrg ), in
     }
     else
     {
-        if ( ( shaderProgram_p != nullptr ) && shaderProgram_p->initialized &&
+        if ( ( shaderProgram_p != nullptr ) && shaderProgram_p->initialized_ &&
              ( shaderProgram_p->locations.PVMmatrix != -1 ) )
         {
             initialized_ = true;

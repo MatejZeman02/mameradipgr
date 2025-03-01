@@ -1,8 +1,6 @@
 #include "pgr.h"
 export module triangle;
 
-// import std;
-
 import object_instance;
 import resources;
 
@@ -16,5 +14,5 @@ export class Triangle : public ObjectInstance
     void draw( const glm::mat4 &viewMatrix, const glm::mat4 &projectionMatrix ) override;
 
   private:
-    bool initialized_; ///< object has the shader with defined locations
+    bool initialized; ///< object has the shader with defined locations
 };
