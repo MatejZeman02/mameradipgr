@@ -9,7 +9,7 @@ Materiál tak může sloužit jako dobrý start pro tvorbu vlastní semestráln�
 ## Lekce
 
 Jednotlivé lekce jsou umístěné na YouTube.
-> Prosím, zkuste to moc nesdílet mimo organizaci.
+> Prosím, zkuste to moc nesdílet mimo organizaci. Ne, že to budete posílat Felklovi do kvízu jako odkaz na zajímavé video! 🫠
 
 videa:
 
