@@ -37,7 +37,7 @@ Pravděpodobně ale nebudu stíhat všechno podle plánu.
 
 Co všechno je potřeba udělat pro nastavení Visual Studia pro tvorbu semestrální práce?
 
-Nejdříve je potřeba si stáhnout samotnou kostru [starou](https://cent.felk.cvut.cz/courses/PGR/seminars/04/kostra.zip), nebo (novou)[https://gitlab.fit.cvut.cz/weisstom/pgr-skeleton].
+Nejdříve je potřeba si stáhnout samotnou kostru [starou](https://cent.felk.cvut.cz/courses/PGR/seminars/04/kostra.zip), nebo [novou](https://gitlab.fit.cvut.cz/weisstom/pgr-skeleton).
 
 **Vývoj pod Windows**
 
