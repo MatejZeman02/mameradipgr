@@ -27,7 +27,7 @@ Projekt je rozdělen do více pracovních částí:
 - Jak využít znalostí z jednotlivých cvik v semestrálce. ❌
 - Teoretické věci ukázáné na příkladech:
   - PVM matice a transformace trojúhelníku/tvorba kamery. ✅ 
-  - Import objektu, vyexportovaného z Blenderu. ❌ (trochu)
+  - Import objektu, vyexportovaného z Blenderu. ❌ (tak trochu)
 - Tvorba ukázkové semestrálky: (pokročilé). Extra věci pro více bodů... ❌.
 
 Pravděpodobně ale nebudu stíhat všechno podle plánu.
@@ -36,6 +36,8 @@ Pravděpodobně ale nebudu stíhat všechno podle plánu.
 ## Instalace PGR Frameworku
 
 Co všechno je potřeba udělat pro nastavení Visual Studia pro tvorbu semestrální práce?
+
+Nejdříve je potřeba si stáhnout samotnou kostru [starou](https://cent.felk.cvut.cz/courses/PGR/seminars/04/kostra.zip), nebo (novou)[https://gitlab.fit.cvut.cz/weisstom/pgr-skeleton].
 
 **Vývoj pod Windows**
 
@@ -49,7 +51,7 @@ Dále do makefilu pomocí `-L` a `-l` přepínačů říci linkeru kde najde kni
 
 
 Pokud ale přemýšlíte o vývoji pod Linuxem, tak bych rovnou doporučil používat modernější knihovny, jako např. `GLFW`.
-Nebudu se tu ale snažit o nějaký podrobnější postup. Pro Vás možná bude vhodnější rovnou použít novou kostru semestrálky od Tomáše Weisse [https://gitlab.fit.cvut.cz/weisstom/pgr-skeleton](https://gitlab.fit.cvut.cz/weisstom/pgr-skeleton).
+Nebudu se tu ale snažit o nějaký podrobnější postup. Pro Vás možná bude vhodnější rovnou použít novou kostru semestrálky od Tomáše Weisse [pgr-skeleton](https://gitlab.fit.cvut.cz/weisstom/pgr-skeleton).
 
 ***
 
@@ -66,6 +68,8 @@ Nebudu se tu ale snažit o nějaký podrobnější postup. Pro Vás možná bude
 - Možná nejsem nejvhodnější člověk pro vysvětlování věcí. Materiály berte, "*jak jsou*".
 - ❗ V současnosti (a budocnosti) existuje nová, lepší kostra od kolegy Tomáše Weisse. [pgr-skeleton](https://gitlab.fit.cvut.cz/weisstom/pgr-skeleton). Nová kostra je super, ale bohužel doteď ještě úplně neexistovala. A dle slov Tomáše není potřeba dělat nějaké nové video, jelikož: *"Ta nová je už přehledná a navíc k ní ještě budu psát extenzivní dokumentaci."*. Takže s ní si budete muset poradit sami. (Ty `.yaml` soubory mi nepřišly až zas tak intuitivní.)
 - V sekci [odkazy a návody/Blender export plugin](https://cent.felk.cvut.cz/courses/PGR/download/blender-export/) najdete mnou aktualizovaný (pro Blender 4) addon do Blenderu, který vyexportuje jeden objekt do kódu. Pokud již kód není aktuální a pro nové verze Blenderu padá, prosím, vězměte to zase někdo do vlastních rukou a přepiště ho, aby fungoval i pro novou verzi. (předem se omlouvám za svůj kód). Tento addon moc nefunguje pro složitější meshe (například jako konverze z geometry nodes, nebo metaballs).
+- Pokud jste někdo náhodou přemýšlel, že byste se konečně naučil s `c++20 moduly`, tak v adresáři `src-kostra-moduly/` je mnou pozměněná stará kostra na moduly. V roce 2025, několik let po vydání této nové funkcionality je vývoj pod moduly stále v experimentálním režimu. Ale doufám, že v tom leží budoucnost c++, takže jsem si to vyzkoušel. Zároveň Vám to v současné situaci nedoporučuji.
+- Nebojte se podívat do (archivu semestrálních prací)[https://cent.felk.cvut.cz/courses/PGR/archives] z ostatních studentských semestrálek. Pro vás to může být skvělý zdroj *inspirace* a ti učitelé s tím tak trochu počítají (jinak by Vám to ani nezpřístupnili).
 
 - **Pokud se v materiálech vyskytují chyby, můžete je nahlásit přes Issues, nebo upozornit do komentáře pod video.** (Ale pokud je rok >= 2026, asi už se mi to nebude moc chtít opravovat. :) )
 Pro rozšíření těchto materiálů pro další ročníky bych stejně doporučil používat novou kostru. 
